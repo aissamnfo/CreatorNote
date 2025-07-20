@@ -1,0 +1,1404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link href="https://fonts.googleapis.com/css?family=Mulish:400,700&display=swap" rel="stylesheet">
+  <meta charset="UTF-8">
+  <title>CreatorNote v1.0</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css?family=Space+Mono:400,700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Poppins:700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      background: radial-gradient(circle at 30% 20%, #a844a1 0%, #3a1c71 100%);
+      color: #fff;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      min-height: 100vh;
+      margin: 0;
+    }
+    .main-container {
+      max-width: 1008px;
+      margin: 2em auto;
+      background: rgba(0,0,0,0.14);
+      border-radius: 18px;
+      padding: 2em 2em 2.5em 2em;
+      box-shadow: 0 6px 40px 0 rgba(0,0,0,0.13);
+    }
+    h1 {
+      margin-top: 0;
+      font-size: 2.1em;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      gap: 0.3em;
+    }
+    .card {
+      background: rgba(255,255,255,0.06);
+      border-radius: 12px;
+      padding: 1em 1.2em 0.8em 1.2em;
+      margin-bottom: 1.4em;
+      box-shadow: 0 2px 8px 0 rgba(0,0,0,0.07);
+    }
+    .card-title-row {
+      display: flex;
+      align-items: center;
+      gap: 0.7em;
+      margin-bottom: 1.1em;
+    }
+    .card-title {
+      font-family: 'Poppins', Arial, sans-serif;
+      font-weight: 700;
+      font-size: 1.23em;
+      letter-spacing: 0.01em;
+    }
+    .btn, .note-toolbar-box button, .action-icon-btn {
+      background: rgba(255,255,255,0.11);
+      color: #fff;
+      border: none;
+      border-radius: 7px;
+      margin-left: 0.3em;
+      font-size: 1.08em;
+      cursor: pointer;
+      padding: 0.1em 0.7em;
+      transition: background 0.17s, color 0.17s, box-shadow 0.17s;
+      outline: none;
+      box-shadow: 0 1px 4px 0 rgba(0,0,0,0.06);
+      min-width: 2em;
+      min-height: 2em;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .btn:hover, .note-toolbar-box button:hover, .action-icon-btn:hover {
+      background: #e4c1f9;
+      color: #3a1c71;
+      box-shadow: 0 2px 8px 0 rgba(0,0,0,0.13);
+    }
+    .btn:focus-visible, .note-toolbar-box button:focus-visible, .action-icon-btn:focus-visible {
+      outline: 2px solid #a844a1;
+      outline-offset: 2px;
+      background: #f5e9ff;
+      color: #3a1c71;
+    }
+    .control-buttons {
+      margin-top: 2em;
+      display: flex;
+      gap: 1.5em;
+      justify-content: flex-start;
+    }
+    .control-buttons button {
+      font-size: 1.1em;
+      padding: 0.6em 1.2em;
+      border-radius: 10px;
+      border: none;
+      background: #f5f5f5;
+      color: #3a1c71;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.17s;
+      display: flex;
+      align-items: center;
+      gap: 0.6em;
+      box-shadow: 0 1px 4px 0 rgba(0,0,0,0.08);
+    }
+    .control-buttons button:hover {
+      background: #e4c1f9;
+    }
+    input[type="input"] {
+      font-size: 1em;
+      background: transparent;
+      color: #fff;
+      border: none;
+      outline: none;
+    }
+    hr {
+      border: none;
+      height: 1px;
+      background: rgba(255,255,255,0.15);
+      margin: 0.25em 0;
+    }
+    .floating-controls {
+      position: fixed;
+      top: 50%;
+      right: 2.2em;
+      transform: translateY(-50%);
+      display: flex;
+      flex-direction: column;
+      gap: 1.2em;
+      z-index: 200;
+      background: rgba(255,255,255,0.13);
+      border-radius: 16px;
+      padding: 1.2em 0.6em;
+      box-shadow: 0 4px 18px 0 rgba(0,0,0,0.12);
+      align-items: center;
+    }
+    .floating-controls .note-area {
+      min-height: 2.2em;
+      padding: 0.7em 1em;
+      margin: 0.3em 0 0.7em 2.2em;
+      background: #fff;
+      border-radius: 7px;
+      font-family: 'Mulish', sans-serif;
+      font-size: 0.87em;
+      color: #181820;
+      box-shadow: 0 1px 8px 0 rgba(0,0,0,0.07);
+      outline: none;
+      white-space: pre-wrap;
+      word-break: break-word;
+      transition: box-shadow 0.14s;
+      border: 1px solid #f0e6fa;
+      overflow-x: auto;
+      resize: vertical;
+      max-height: 14em;
+    }
+    .note-area b, .note-area strong {
+      font-weight: bold;
+    }
+    .note-area i, .note-area em {
+      font-style: italic;
+    }
+    .note-area u {
+      text-decoration: underline;
+    }
+    .note-area a {
+      text-decoration: underline;
+      color: #1565c0;
+      cursor: pointer;
+    }
+    .note-area a:hover {
+      color: #0d47a1;
+      text-decoration: underline;
+    }
+    .note-area code {
+      background: #ececec;
+      border-radius: 3px;
+      padding: 0.1em 0.3em;
+      font-size: 2em;
+    }
+    .note-area blockquote {
+      border-left: 3px solid #ccc;
+      margin: 0.4em 0 0.4em 0;
+      padding-left: 0.9em;
+      background: #f7f7f7;
+    }
+    .note-area s, .note-area del {
+      text-decoration: line-through;
+    }
+    .floating-controls button {
+      width: 2.7em;
+      height: 2.7em;
+      font-size: 1.4em;
+      border: none;
+      border-radius: 50%;
+      background: #fff;
+      color: #a844a1;
+      box-shadow: 0 2px 8px 0 rgba(0,0,0,0.07);
+      cursor: pointer;
+      transition: background 0.18s, color 0.18s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .floating-controls button:hover {
+      background: #e4c1f9;
+      color: #3a1c71;
+    }
+    .floating-controls input[type="file"] {
+      display: none;
+    }
+    .right-action-bar {
+      position: fixed;
+      top: 50%;
+      right: 2vw;
+      transform: translateY(-50%);
+      display: flex;
+      flex-direction: column;
+      gap: 1.5em;
+      z-index: 1000;
+    }
+    .action-icon-btn {
+      background: #fff;
+      border: none;
+      border-radius: 50%;
+      width: 5.5em;
+      height: 5.5em;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 8px 0 rgba(0,0,0,0.07);
+      font-size: 2.8em;
+      color: #a844a1;
+      transition: background 0.17s, color 0.17s, transform 0.17s;
+      cursor: pointer;
+      margin: 0 auto;
+    }
+    .action-icon-btn:hover {
+      background: #e4c1f9;
+      color: #3a1c71;
+      transform: scale(1.08);
+    }
+    .gradient-controls-panel {
+      background: rgba(255,255,255,0.18);
+      border-radius: 13px;
+      padding: 1.1em 1.2em 1.2em 1.2em;
+      box-shadow: 0 2px 12px 0 rgba(0,0,0,0.09);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.7em;
+      margin-top: 0.5em;
+    }
+    .gradient-swapper {
+      position: relative;
+      width: 9em;
+      height: 2em;
+      margin-bottom: 0.6em;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .gradient-swapper input[type="color"] {
+      position: absolute;
+      width: 11em;
+      height: 11em;
+      border-radius: 7px;
+      border: none;
+      box-shadow: 0 2px 8px 0 rgba(0,0,0,0.13);
+      cursor: pointer;
+      background: none;
+      padding: 0;
+    }
+    .gradient-swapper #bgColor1 {
+      left: 0.2em;
+      top: 0.2em;
+      z-index: 2;
+    }
+    .gradient-swapper #bgColor2 {
+      left: 1.1em;
+      top: 1.1em;
+      z-index: 1;
+    }
+    .gradient-swapper #swapColorsBtn {
+      position: absolute;
+      right: -1.1em;
+      top: 0.7em;
+      background: rgba(0,0,0,0.10);
+      border: none;
+      border-radius: 50%;
+      width: 3.4em;
+      height: 3.4em;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 3;
+      cursor: pointer;
+      box-shadow: 0 2px 6px 0 rgba(0,0,0,0.11);
+      font-size: 2em;
+    }
+    .gradient-controls-panel button#saveBgBtn {
+      background: linear-gradient(90deg,#a844a1 0%,#3a1c71 100%);
+      color: #fff;
+      border: none;
+      border-radius: 7px;
+      font-size: 1.3em;
+      cursor: pointer;
+      padding: 0.5em 1.5em;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      gap: 0.4em;
+      box-shadow: 0 2px 12px 0 rgba(0,0,0,0.09);
+      margin-top: 0.7em;
+    }
+    .note-area {
+      padding: 1em 0.8em !important;
+    }
+    .btn, .note-toolbar-box button, .action-icon-btn {
+      background: rgba(255,255,255,0.11);
+      color: #fff;
+      border: none;
+      border-radius: 7px;
+      margin-left: 0.3em;
+      font-size: 1.08em;
+      cursor: pointer;
+      padding: 0.1em 0.7em;
+      transition: background 0.17s, color 0.17s, box-shadow 0.17s;
+      outline: none;
+      box-shadow: 0 1px 4px 0 rgba(0,0,0,0.06);
+      min-width: 2em;
+      min-height: 2em;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .btn:hover, .note-toolbar-box button:hover, .action-icon-btn:hover {
+      background: #e4c1f9;
+      color: #3a1c71;
+      box-shadow: 0 2px 8px 0 rgba(0,0,0,0.13);
+    }
+    .btn:focus-visible, .note-toolbar-box button:focus-visible, .action-icon-btn:focus-visible {
+      outline: 2px solid #a844a1;
+      outline-offset: 2px;
+      background: #f5e9ff;
+      color: #3a1c71;
+    }
+    @media (max-width: 800px) {
+      .right-action-bar {
+        position: fixed;
+        flex-direction: row;
+        bottom: 0;
+        top: auto;
+        right: 0;
+        left: 0;
+        width: 100vw;
+        transform: none;
+        justify-content: center;
+        align-items: center;
+        gap: 0.7em;
+        z-index: 1000;
+        background: rgba(255,255,255,0.93);
+        box-shadow: 0 -2px 12px 0 rgba(0,0,0,0.07);
+        padding: 0.3em 0;
+      }
+      .action-icon-btn {
+        width: 5em;
+        height: 5em;
+        font-size: 2.5em;
+      }
+      .gradient-controls-panel {
+        padding: 0.4em 0.3em 0.5em 0.3em;
+        margin-top: 0;
+      }
+      .gradient-swapper {
+        width: 7em;
+        height: 7em;
+      }
+      .gradient-swapper input[type="color"] {
+        width: 9em;
+        height: 9em;
+      }
+      .gradient-swapper #swapColorsBtn {
+        width: 3.5em;
+        height: 3.5em;
+        font-size: 2em;
+      }
+    }
+    .note-toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5em;
+      margin: 0.2em 0 0.2em 1.8em;
+      padding: 0.3em 0.5em;
+      background: rgba(0,0,0,0.1);
+      border-radius: 8px;
+      z-index: 10;
+    }
+    .action-icon-btn, .btn {
+      font-size: 0.95em !important;
+      min-width: 1.7em !important;
+      min-height: 1.7em !important;
+      width: 1.7em !important;
+      height: 1.7em !important;
+      padding: 0.1em 0.3em !important;
+    }
+    .right-action-bar {
+      gap: 0.7em !important;
+    }
+    .gradient-swapper input[type="color"] {
+      width: 1.5em !important;
+      height: 1.5em !important;
+    }
+    .gradient-swapper #swapColorsBtn {
+      width: 1.3em !important;
+      height: 1.3em !important;
+      font-size: 0.95em !important;
+    }
+    .gradient-controls-panel button#saveBgBtn {
+      font-size: 0.95em !important;
+      padding: 0.2em 0.7em !important;
+    }
+    .right-action-bar {
+      position: fixed;
+      top: 50%;
+      right: 2vw;
+      transform: translateY(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.7em;
+      z-index: 1000;
+      background: rgba(30,30,60,0.22);
+      border-radius: 14px;
+      box-shadow: 0 2px 12px 0 rgba(0,0,0,0.13);
+      padding: 0.7em 0.5em 0.7em 0.5em;
+      min-width: 60px;
+      max-width: 98vw;
+    }
+    .action-icon-btn {
+      width: 2.7em;
+      height: 2.7em;
+      font-size: 1.3em;
+      margin: 0.3em 0;
+      background: linear-gradient(135deg,#a844a1 0%,#3a1c71 100%);
+      color: #fff;
+      border: none;
+      border-radius: 50%;
+      box-shadow: 0 2px 8px 0 rgba(0,0,0,0.13);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.18s, color 0.18s, transform 0.18s;
+    }
+    .action-icon-btn:hover {
+      background: #e4c1f9;
+      color: #3a1c71;
+      transform: scale(1.08);
+    }
+    .gradient-controls-panel {
+      background: rgba(255,255,255,0.13);
+      border-radius: 10px;
+      padding: 0.5em 0.5em 0.7em 0.5em;
+      box-shadow: 0 1px 6px 0 rgba(0,0,0,0.09);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.4em;
+      margin-top: 0.2em;
+      min-width: 0;
+      max-width: 98vw;
+    }
+  </style>
+</head>
+<body>
+  <div class="main-container">
+    <h1 id="main-title" style="display: flex; align-items: center; gap: 0.4em;">
+      <span id="main-title-text">✅ CreatorNote v1.0</span>
+      <button id="edit-title-btn" title="Edit Title" style="background: none; border: none; cursor: pointer; color: #fff; font-size: 1.1em; padding: 0 0.2em;">
+        <svg xmlns="http://www.w3.org/2000/svg" width="1.3em" height="1.3em" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536M9 13.5l6.75-6.75a2.121 2.121 0 113 3L12 16.5H9v-3z"/></svg>
+      </button>
+    </h1>
+    <div id="dynamic-sections"></div>
+    <div class="right-action-bar">
+      <button id="saveNotesBtn" class="action-icon-btn" onclick="window.saveNotesJson()" title="Save Notes">📝</button>
+      <button id="saveTitlesBtn" class="action-icon-btn" onclick="window.saveTitlesJson()" title="Save Structure (titles only)">📑</button>
+      <input type="file" id="fileInput" accept=".json" style="display:none" onchange="window.importChecklist(event)" />
+      <button class="action-icon-btn" onclick="document.getElementById('fileInput').click()" title="Import JSON">
+        📂
+      </button>
+      <button class="action-icon-btn" onclick="window.resetChecklist()" title="Reset Template">
+        ♻️
+      </button>
+      <div class="gradient-controls-panel">
+        <div class="gradient-swapper">
+          <input type="color" id="bgColor1" value="#a844a1" title="Gradient Color 1">
+          <input type="color" id="bgColor2" value="#3a1c71" title="Gradient Color 2">
+          <button id="swapColorsBtn" title="Swap Colors" style="background:#fff; border-radius:50%; width:3.4em; height:3.4em; display:flex; align-items:center; justify-content:center; box-shadow:0 2px 8px 0 rgba(0,0,0,0.07); font-size:2em;">
+            🔄
+          </button>
+        </div>
+        <button id="saveBgBtn" title="Save Background Gradient">
+          💾 Save
+        </button>
+      </div>
+      <button id="aboutBtn" class="action-icon-btn" title="About / Info" style="margin-top:1.2em; background:linear-gradient(135deg,#3a1c71 0%,#a844a1 100%); font-size:1.2em;">ℹ️</button>
+      <div id="aboutModal" style="display:none; position:fixed; bottom:2em; right:2em; background:#fff; color:#222; border-radius:12px; box-shadow:0 4px 24px 0 rgba(0,0,0,0.18); padding:1.3em 1.7em; z-index:9999; min-width:220px; max-width:90vw; font-family:'Mulish',Arial,sans-serif;">
+        <div style="font-size:1.2em; font-weight:bold; margin-bottom:0.5em;">CreatorNote v1.0</div>
+        <div style="font-size:1em; margin-bottom:0.3em;">By EINARI</div>
+        <div style="font-size:0.98em; margin-bottom:0.3em;">Version: <b>v1.0</b></div>
+        <div style="font-size:0.95em; margin-bottom:0.7em;">A modern, accessible notepad & workflow checklist for content creators.</div>
+        <div style="font-size:0.93em; color:#666;">Contact: <a href="mailto:aissamnfo@email.com" style="color:#3a1c71;">aissamnfo@email.com</a></div>
+        <div style="font-size:0.93em; color:#666; margin-top:0.5em;">
+          <span style="margin-right:0.7em;">
+            <a href="https://www.linkedin.com/in/aissamnfo/" target="_blank" rel="noopener" style="color:#0a66c2; text-decoration:none;">
+              <span title="LinkedIn" aria-label="LinkedIn" style="font-size:1.2em; vertical-align:middle;">🔗</span> LinkedIn
+            </a>
+          </span>
+          <span style="margin-right:0.7em;">
+            <a href="https://www.instagram.com/aissamnfo/" target="_blank" rel="noopener" style="color:#d6249f; text-decoration:none;">
+              <span title="Instagram" aria-label="Instagram" style="font-size:1.2em; vertical-align:middle;">📸</span> Instagram
+            </a>
+          </span>
+          <span>
+            <a href="https://x.com/aissamnfo" target="_blank" rel="noopener" style="color:#181820; text-decoration:none;">
+              <span title="X (Twitter)" aria-label="X (Twitter)" style="font-size:1.2em; vertical-align:middle;">𝕏</span> X
+            </a>
+          </span>
+        </div>
+        <button onclick="document.getElementById('aboutModal').style.display='none'" style="margin-top:1em; background:#a844a1; color:#fff; border:none; border-radius:6px; padding:0.4em 1.2em; font-size:1em; cursor:pointer;">Close</button>
+      </div>
+    </div>
+  </div>
+  <script>
+    // --- Toolbar Helper Functions ---
+    function addToolbarBtn(icon, title, action, extraProps = {}) {
+      const btn = document.createElement('button');
+      btn.className = 'btn';
+      btn.type = 'button';
+      btn.title = title;
+      btn.setAttribute('aria-label', title);
+      btn.setAttribute('role', 'button');
+      btn.tabIndex = 0;
+      if (action) btn.onclick = action;
+      if (extraProps.id) btn.id = extraProps.id;
+      if (extraProps.style) Object.assign(btn.style, extraProps.style);
+      btn.innerHTML = icon;
+      btn.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          btn.click();
+        }
+      });
+      return btn;
+    }
+
+    function createColorPicker(colors, onPick) {
+      const colorBtn = addToolbarBtn('🎨', 'Text Color', null, { style: { position: 'relative' } });
+      const colorMenu = document.createElement('div');
+      colorMenu.style.display = 'none';
+      colorMenu.style.position = 'absolute';
+      colorMenu.style.top = '2em';
+      colorMenu.style.left = '0';
+      colorMenu.style.background = '#222';
+      colorMenu.style.border = '1px solid #555';
+      colorMenu.style.borderRadius = '8px';
+      colorMenu.style.padding = '0.2em 0.4em';
+      colorMenu.style.zIndex = '100';
+      colors.forEach(c => {
+        const cbox = document.createElement('span');
+        cbox.style.display = 'inline-block';
+        cbox.style.width = '18px';
+        cbox.style.height = '18px';
+        cbox.style.margin = '2px';
+        cbox.style.borderRadius = '4px';
+        cbox.style.background = c;
+        cbox.style.border = '2px solid #fff2';
+        cbox.style.cursor = 'pointer';
+        cbox.setAttribute('aria-label', 'Color ' + c);
+        cbox.onclick = () => { onPick(c); colorMenu.style.display = 'none'; };
+        colorMenu.appendChild(cbox);
+      });
+      colorBtn.appendChild(colorMenu);
+      colorBtn.onclick = (e) => {
+        colorMenu.style.display = colorMenu.style.display === 'none' ? 'block' : 'none';
+        e.stopPropagation();
+      };
+      return colorBtn;
+    }
+
+    function createEmojiPicker(emojis, onPick) {
+      const emojiBtn = addToolbarBtn('😊', 'Insert Emoji', null, { style: { position: 'relative' } });
+      const emojiMenu = document.createElement('div');
+      emojiMenu.style.display = 'none';
+      emojiMenu.style.position = 'absolute';
+      emojiMenu.style.left = '50%';
+      emojiMenu.style.top = '110%';
+      emojiMenu.style.transform = 'translateX(-50%)';
+      emojiMenu.style.background = '#fff';
+      emojiMenu.style.border = 'none';
+      emojiMenu.style.borderRadius = '10px';
+      emojiMenu.style.padding = '0.4em 0.5em';
+      emojiMenu.style.zIndex = '100';
+      emojiMenu.style.boxShadow = '0 2px 16px 0 rgba(0,0,0,0.13)';
+      emojiMenu.style.maxWidth = '420px';
+      emojiMenu.style.minWidth = '220px';
+      emojiMenu.style.maxHeight = '220px';
+      emojiMenu.style.overflow = 'auto';
+      emojiMenu.style.userSelect = 'none';
+      const emojiTable = document.createElement('div');
+      emojiTable.style.display = 'grid';
+      emojiTable.style.gridTemplateColumns = 'repeat(12, 1fr)';
+      emojiTable.style.gap = '6px';
+      emojiTable.style.justifyItems = 'center';
+      emojiTable.style.alignItems = 'center';
+      emojis.forEach(ej => {
+        const ebtn = document.createElement('span');
+        ebtn.textContent = ej;
+        ebtn.style.fontSize = '1.25em';
+        ebtn.style.padding = '3px';
+        ebtn.style.cursor = 'pointer';
+        ebtn.style.textAlign = 'center';
+        ebtn.style.borderRadius = '5px';
+        ebtn.style.transition = 'background 0.13s';
+        ebtn.setAttribute('aria-label', 'Emoji ' + ej);
+        ebtn.tabIndex = 0;
+        ebtn.onmouseover = () => { ebtn.style.background = '#eee'; };
+        ebtn.onmouseout = () => { ebtn.style.background = 'none'; };
+        ebtn.onclick = () => { onPick(ej); emojiMenu.style.display = 'none'; };
+        ebtn.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            ebtn.click();
+          }
+        });
+        emojiTable.appendChild(ebtn);
+      });
+      emojiMenu.appendChild(emojiTable);
+      emojiBtn.appendChild(emojiMenu);
+      emojiBtn.onclick = (e) => {
+        emojiMenu.style.display = emojiMenu.style.display === 'none' ? 'block' : 'none';
+        e.stopPropagation();
+      };
+      return emojiBtn;
+    }
+	    // --- Checklist Data and Logic ---
+const defaultSections = [
+  { title: '🗒️ My First Note:', subtitles: [{ text: 'New Note 1', note: 'Hello' }] }
+];
+
+    function getSections() {
+      let s = JSON.parse(localStorage.getItem('dynamicChecklistSections') || 'null');
+      if (!Array.isArray(s) || s.length === 0) {
+        s = JSON.parse(JSON.stringify(defaultSections));
+        localStorage.setItem('dynamicChecklistSections', JSON.stringify(s));
+      }
+      return s;
+    }
+    window.sections = getSections();
+
+    function saveSections() {
+      localStorage.setItem('dynamicChecklistSections', JSON.stringify(window.sections));
+    }
+
+    function renderSections() {
+      const container = document.getElementById('dynamic-sections');
+      container.innerHTML = '';
+      window.sections.forEach((section, idx) => {
+        const card = document.createElement('div');
+        card.className = 'card';
+        // --- Title row with icons ---
+        const titleRow = document.createElement('div');
+        titleRow.className = 'card-title-row';
+        const titleSpan = document.createElement('span');
+        titleSpan.className = 'card-title';
+        titleSpan.textContent = section.title;
+        titleRow.appendChild(titleSpan);
+        // Edit title button
+        const editTitleBtn = document.createElement('button');
+        editTitleBtn.className = 'btn';
+        editTitleBtn.title = 'Edit Section Title';
+        editTitleBtn.textContent = '✏️';
+        editTitleBtn.onclick = () => {
+          const input = document.createElement('input');
+          input.value = section.title;
+          input.style.fontSize = '1.2em';
+          input.style.fontWeight = 'bold';
+          input.style.flex = '1';
+          input.style.background = 'transparent';
+          input.style.color = '#fff';
+          input.style.border = 'none';
+          input.style.outline = 'none';
+          input.onblur = input.onchange = () => {
+            if (input.value.trim() !== '') {
+              window.sections[idx].title = input.value;
+              saveSections();
+              renderSections();
+            }
+          };
+          titleRow.replaceChild(input, titleSpan);
+          input.focus();
+          input.select();
+        };
+        // Add section button
+        const addBtn = document.createElement('button');
+        addBtn.className = 'btn';
+        addBtn.title = 'Add Section Below';
+        addBtn.textContent = '➕';
+        addBtn.onclick = () => {
+          window.sections.splice(idx + 1, 0, { title: '🆕 New Note', subtitles: ["My Nots"] });
+          saveSections();
+          renderSections();
+        };
+        // Delete section button
+        const delBtn = document.createElement('button');
+        delBtn.className = 'btn';
+        delBtn.title = 'Delete Section';
+        delBtn.textContent = '🗑️';
+        delBtn.onclick = () => {
+          if (window.sections.length > 1 && confirm('Delete this section?')) {
+            window.sections.splice(idx, 1);
+            saveSections();
+            renderSections();
+          }
+        };
+        titleRow.appendChild(editTitleBtn);
+        titleRow.appendChild(addBtn);
+        if (window.sections.length > 1) titleRow.appendChild(delBtn);
+        card.appendChild(titleRow);
+        // --- Subtitles with edit/add/delete ---
+        section.subtitles.forEach((subtitleObj, sidx) => {
+          if (typeof subtitleObj === 'string') {
+            subtitleObj = { text: subtitleObj, note: '' };
+            window.sections[idx].subtitles[sidx] = subtitleObj;
+          }
+          let tempDiv = document.createElement('div');
+          tempDiv.innerHTML = subtitleObj.note || '';
+          let expanded = !!(subtitleObj.note && /\S/.test(tempDiv.textContent));
+          const subRow = document.createElement('div');
+          subRow.style.display = 'flex';
+          subRow.style.alignItems = 'center';
+          subRow.style.gap = '0.5em';
+          subRow.style.margin = '0.25em 0';
+          // Expand/collapse icon
+          const expIcon = document.createElement('button');
+          expIcon.className = 'btn';
+          expIcon.style.fontSize = '1.2em';
+          expIcon.style.marginRight = '0.2em';
+          expIcon.title = expanded ? 'Collapse note' : 'Expand note';
+          expIcon.innerHTML = expanded ? '▼' : '▶️';
+          // Subtitle text
+          const subSpan = document.createElement('span');
+          subSpan.textContent = subtitleObj.text;
+          subSpan.style.flex = '1';
+          subSpan.style.fontFamily = "'Poppins', Arial, sans-serif";
+          subSpan.style.fontWeight = '700';
+          subSpan.style.color = '#eaeaea';
+          // Edit subtitle
+          const editSubBtn = document.createElement('button');
+          editSubBtn.className = 'btn';
+          editSubBtn.title = 'Edit Subtitle';
+          editSubBtn.textContent = '✏️';
+          editSubBtn.onclick = () => {
+            const input = document.createElement('input');
+            input.value = subtitleObj.text;
+            input.style.flex = '1';
+            input.style.background = 'transparent';
+            input.style.color = '#fff';
+            input.style.border = 'none';
+            input.style.outline = 'none';
+            input.onblur = input.onchange = () => {
+              if (input.value.trim() !== '') {
+                window.sections[idx].subtitles[sidx].text = input.value;
+                saveSections();
+                renderSections();
+              }
+            };
+            subRow.replaceChild(input, subSpan);
+            input.focus();
+            input.select();
+          };
+          // Add subtitle
+          const addSubBtn = document.createElement('button');
+          addSubBtn.className = 'btn';
+          addSubBtn.title = 'Add Subtitle Below';
+          addSubBtn.textContent = '➕';
+          addSubBtn.onclick = () => {
+            window.sections[idx].subtitles.splice(sidx + 1, 0, { text: 'New Note X', note: '' });
+            saveSections();
+            renderSections();
+          };
+          // Delete subtitle
+          const delSubBtn = document.createElement('button');
+          delSubBtn.className = 'btn';
+          delSubBtn.title = 'Delete Subtitle';
+          delSubBtn.textContent = '🗑️';
+          delSubBtn.onclick = () => {
+            if (window.sections[idx].subtitles.length > 1 && confirm('Delete this subtitle?')) {
+              window.sections[idx].subtitles.splice(sidx, 1);
+              saveSections();
+              renderSections();
+            }
+          };
+          subRow.appendChild(expIcon);
+          subRow.appendChild(subSpan);
+          subRow.appendChild(editSubBtn);
+          subRow.appendChild(addSubBtn);
+          if (window.sections[idx].subtitles.length > 1) subRow.appendChild(delSubBtn);
+          card.appendChild(subRow);
+
+          // --- Toolbar and Note Area ---
+          const noteToolbar = document.createElement('div');
+          noteToolbar.className = 'note-toolbar';
+          noteToolbar.style.display = expanded ? 'flex' : 'none';
+          noteToolbar.style.gap = '0.5em';
+          noteToolbar.style.margin = '0.2em 0 0.2em 1.8em';
+
+          let noteArea = document.createElement('div');
+          noteArea.className = 'subtitle-note note-area';
+          noteArea.contentEditable = true;
+          noteArea.style.minHeight = '32px';
+          noteArea.style.background = '#fff';
+          noteArea.style.color = '#181820';
+          noteArea.style.fontFamily = 'Mulish, sans-serif';
+          noteArea.style.margin = '0.2em 0 0.7em 1.8em';
+          noteArea.style.padding = '1.2em 1em';
+          noteArea.style.borderRadius = '7px';
+          noteArea.style.fontSize = '0.87em';
+          noteArea.style.outline = 'none';
+          noteArea.innerHTML = subtitleObj.note || '';
+          noteArea.style.display = expanded ? 'block' : 'none';
+
+          // Handle tab key to insert tab character instead of moving focus
+          noteArea.addEventListener('keydown', function(e) {
+            if (e.key === 'Tab') {
+              e.preventDefault();
+              document.execCommand('insertText', false, '\t');
+            }
+          });
+
+          // --- Toolbar Buttons (scoped to this noteArea) ---
+          // Custom undo/redo stack for each note area
+          let undoStack = [];
+          let redoStack = [];
+          function pushUndoState() {
+            // Limit stack size to 50
+            if (undoStack.length > 50) undoStack.shift();
+            undoStack.push(noteArea.innerHTML);
+            // Clear redo stack on new input
+            redoStack = [];
+          }
+          // On input, push state
+          noteArea.addEventListener('input', pushUndoState);
+          // Initialize stack with initial state
+          pushUndoState();
+          // Undo/Redo buttons
+          const undoBtn = addToolbarBtn('↶', 'Undo', () => {
+            if (undoStack.length > 1) {
+              redoStack.push(undoStack.pop());
+              noteArea.innerHTML = undoStack[undoStack.length - 1];
+            }
+            noteArea.focus();
+          });
+          const redoBtn = addToolbarBtn('↷', 'Redo', () => {
+            if (redoStack.length > 0) {
+              const state = redoStack.pop();
+              undoStack.push(state);
+              noteArea.innerHTML = state;
+            }
+            noteArea.focus();
+          });
+          noteToolbar.appendChild(undoBtn);
+          noteToolbar.appendChild(redoBtn);
+
+          // Clean formatting button: strip all HTML/tags/styles from selection or all
+          if (!noteToolbar.querySelector('.clean-format-btn')) {
+            const cleanBtn = addToolbarBtn('🧹', 'Clean Format', () => {
+              if (!confirm('Are you sure you want to clean all formatting? This will reset undo/redo history and cannot be undone.')) {
+                return;
+              }
+              const selection = window.getSelection();
+              function stripHTML(html) {
+                var div = document.createElement('div');
+                div.innerHTML = html;
+                return div.textContent || div.innerText || '';
+              }
+              if (selection.rangeCount > 0 && !selection.isCollapsed) {
+                const range = selection.getRangeAt(0);
+                const fragment = range.extractContents();
+                const cleanText = stripHTML(fragment.textContent || fragment.innerText || '');
+                // Insert as span with default style
+                const span = document.createElement('span');
+                span.textContent = cleanText;
+                span.style.fontSize = '14px'; // default is now 14px
+                span.style.color = '#181820';
+                span.style.fontWeight = 'normal';
+                span.style.fontStyle = 'normal';
+                span.style.textDecoration = 'none';
+                span.style.background = 'none';
+                range.insertNode(span);
+              } else {
+                // Fix: get text before clearing
+                const cleanText = stripHTML(noteArea.innerHTML);
+                noteArea.innerHTML = '';
+                const span = document.createElement('span');
+                span.textContent = cleanText;
+                span.style.fontSize = '14px'; // default is now 14px
+                span.style.color = '#181820';
+                span.style.fontWeight = 'normal';
+                span.style.fontStyle = 'normal';
+                span.style.textDecoration = 'none';
+                span.style.background = 'none';
+                noteArea.appendChild(span);
+              }
+              // Reset undo/redo stack to only the cleaned state
+              undoStack = [noteArea.innerHTML];
+              redoStack = [];
+              alert('Formatting cleaned! Undo/redo history has been reset.');
+              noteArea.focus();
+            });
+            cleanBtn.classList.add('clean-format-btn');
+            noteToolbar.appendChild(cleanBtn);
+          }
+
+          noteToolbar.appendChild(addToolbarBtn('<b>B</b>', 'Bold', () => { document.execCommand('bold'); noteArea.focus(); }));
+          noteToolbar.appendChild(addToolbarBtn('<i>I</i>', 'Italic', () => { document.execCommand('italic'); noteArea.focus(); }));
+          noteToolbar.appendChild(addToolbarBtn('<u>U</u>', 'Underline', () => { document.execCommand('underline'); noteArea.focus(); }));
+          noteToolbar.appendChild(addToolbarBtn('<s>S</s>', 'Strikethrough', () => { document.execCommand('strikeThrough'); noteArea.focus(); }));
+
+          // List dropdown
+          const listBtn = addToolbarBtn('📋', 'Add List', null, { style: { position: 'relative' } });
+          const listMenu = document.createElement('div');
+          listMenu.style.display = 'none';
+          listMenu.style.position = 'absolute';
+          listMenu.style.top = '2em';
+          listMenu.style.left = '0';
+          listMenu.style.background = '#fff';
+          listMenu.style.border = '1px solid #a844a1';
+          listMenu.style.borderRadius = '8px';
+          listMenu.style.padding = '0.3em 0';
+          listMenu.style.zIndex = '100';
+          listMenu.style.boxShadow = '0 2px 12px 0 rgba(0,0,0,0.13)';
+          listMenu.style.minWidth = '180px';
+          [
+            {label: 'Bulleted List', icon: '•', cmd: () => document.execCommand('insertUnorderedList')},
+            {label: 'Numbered List', icon: '1.', cmd: () => document.execCommand('insertOrderedList')},
+            {label: 'To-do List', icon: '☐', cmd: () => {
+              document.execCommand('insertUnorderedList');
+              setTimeout(() => {
+                const uls = noteArea.querySelectorAll('ul');
+                uls.forEach(ul => {
+                  ul.querySelectorAll('li').forEach(li => {
+                    if (!li.querySelector('input[type=checkbox]')) {
+                      li.innerHTML = `<input type='checkbox' style='margin-right:0.5em;'>` + li.innerHTML;
+                    }
+                  });
+                });
+              }, 10);
+            }}
+          ].forEach(opt => {
+            const btn = document.createElement('button');
+            btn.innerHTML = `${opt.icon} ${opt.label}`;
+            btn.style.display = 'block';
+            btn.style.width = '100%';
+            btn.style.background = 'none';
+            btn.style.color = '#181820';
+            btn.style.border = 'none';
+            btn.style.textAlign = 'left';
+            btn.style.padding = '0.5em 1em';
+            btn.style.cursor = 'pointer';
+            btn.style.fontFamily = 'Mulish, Arial, sans-serif';
+            btn.style.fontSize = '0.9em';
+            btn.style.transition = 'background 0.15s';
+            btn.setAttribute('aria-label', opt.label);
+            btn.onmouseover = () => { btn.style.background = '#f0f0f0'; };
+            btn.onmouseout = () => { btn.style.background = 'none'; };
+            btn.onclick = () => { listMenu.style.display = 'none'; opt.cmd(); noteArea.focus(); };
+            listMenu.appendChild(btn);
+          });
+          listBtn.appendChild(listMenu);
+          listBtn.onclick = (e) => {
+            listMenu.style.display = listMenu.style.display === 'none' ? 'block' : 'none';
+            e.stopPropagation();
+          };
+          noteToolbar.appendChild(listBtn);
+
+          // Link button
+          noteToolbar.appendChild(addToolbarBtn('🔗', 'Add/Edit Link', () => {
+            let url = prompt('Enter URL:');
+            if (url) {
+              document.execCommand('createLink', false, url);
+            }
+            noteArea.focus();
+          }));
+
+          // Spellcheck toggle
+          let spellBtn = addToolbarBtn('<span id="spellcheck-icon" style="font-size:1.1em;">ABC✓</span>', 'Disable Spellcheck', () => {
+            noteArea.spellcheck = !noteArea.spellcheck;
+            spellBtn.title = noteArea.spellcheck ? 'Disable Spellcheck' : 'Enable Spellcheck';
+            spellBtn.querySelector('#spellcheck-icon').textContent = noteArea.spellcheck ? 'ABC✓' : 'ABC✗';
+            spellBtn.style.opacity = noteArea.spellcheck ? '1' : '0.5';
+            noteArea.focus();
+          });
+          noteArea.spellcheck = true;
+          spellBtn.title = 'Disable Spellcheck';
+          spellBtn.style.opacity = '1';
+          noteToolbar.appendChild(spellBtn);
+
+          // Color picker
+          noteToolbar.appendChild(createColorPicker(
+            ['#181820', '#1565c0', '#c62828', '#388e3c', '#b39ddb', '#ffb347', '#ff6961', '#aec6cf'],
+            (c) => { document.execCommand('foreColor', false, c); noteArea.focus(); }
+          ));
+
+          // Emoji picker
+          noteToolbar.appendChild(createEmojiPicker(
+            ['😀','😂','😍','🔥','💡','🎉','👍','🙌','🥳','😎','🎬','🎨','🎵','✍️','🧠','📤','🤩','🤔','😅','😇','🤓','😜','🥰','😏','😱','😴','🤖','💻','📱','📸','🎤','🎧','🎯','📝','📚','🗂️','🗒️','🧩','🛠️','🧑‍💻','📈','🗃️','🧭','🚀'],
+            (ej) => { document.execCommand('insertText', false, ej); noteArea.focus(); }
+          ));
+
+          // YouTube video button
+          noteToolbar.appendChild(addToolbarBtn('📺', 'Add YouTube Video', () => {
+            let url = prompt('Enter YouTube URL:');
+            if (url) {
+              // Extract video ID from various YouTube URL formats
+              let videoId = '';
+              const patterns = [
+                /(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([^&\n?#]+)/,
+                /youtube\.com\/watch\?.*v=([^&\n?#]+)/
+              ];
+              for (let pattern of patterns) {
+                const match = url.match(pattern);
+                if (match) {
+                  videoId = match[1];
+                  break;
+                }
+              }
+              if (videoId) {
+                const embed = `<iframe width="560" height="315" src="https://www.youtube.com/embed/${videoId}" frameborder="0" allowfullscreen style="max-width:100%; border-radius:8px; margin:0.6em auto; display:block;"></iframe>`;
+                document.execCommand('insertHTML', false, embed);
+              } else {
+                alert('Invalid YouTube URL');
+              }
+            }
+            noteArea.focus();
+          }));
+
+          // Image upload button
+          const imageInput = document.createElement('input');
+          imageInput.type = 'file';
+          imageInput.accept = 'image/*';
+          imageInput.style.display = 'none';
+          imageInput.onchange = function(e) {
+            const file = e.target.files[0];
+            if (file) {
+              const reader = new FileReader();
+              reader.onload = function(evt) {
+                const img = new Image();
+                img.onload = function() {
+                  const maxWidth = 700;
+                  const displayWidth = img.naturalWidth > maxWidth ? maxWidth : img.naturalWidth;
+                  img.style.width = displayWidth + 'px';
+                  img.style.maxWidth = displayWidth + 'px';
+                  img.style.height = 'auto';
+                  img.style.display = 'block';
+                  img.style.margin = '0.6em auto';
+                  img.style.borderRadius = '8px';
+                  img.style.boxShadow = '0 1px 8px 0 rgba(0,0,0,0.07)';
+                  document.execCommand('insertHTML', false, img.outerHTML);
+                };
+                img.src = evt.target.result;
+              };
+              reader.readAsDataURL(file);
+            }
+            noteArea.focus();
+          };
+          document.body.appendChild(imageInput);
+          noteToolbar.appendChild(addToolbarBtn('🖼️', 'Upload Image', () => {
+            imageInput.click();
+          }));
+
+          // Format cleanup button
+          // This button is now handled by the .clean-format-btn
+
+          // Paste handler for this noteArea (no auto-formatting)
+          noteArea.addEventListener('paste', function(e) {
+            // Allow default paste behavior - no auto-formatting
+            // Only handle image pasting
+            let clipboard = (e.clipboardData || window.clipboardData);
+            if (clipboard.items) {
+              for (let i = 0; i < clipboard.items.length; i++) {
+                let item = clipboard.items[i];
+                if (item.type.indexOf('image') !== -1) {
+                  e.preventDefault();
+                  let file = item.getAsFile();
+                  let reader = new FileReader();
+                  reader.onload = function(evt) {
+                    let img = new window.Image();
+                    img.onload = function() {
+                      // Only resize if image is larger than 700px
+                      const maxWidth = 700;
+                      const displayWidth = img.naturalWidth > maxWidth ? maxWidth : img.naturalWidth;
+                      img.style.width = displayWidth + 'px';
+                      img.style.maxWidth = displayWidth + 'px';
+                      img.style.height = 'auto';
+                      img.style.display = 'block';
+                      img.style.margin = '0.6em auto';
+                      img.style.borderRadius = '8px';
+                      img.style.boxShadow = '0 1px 8px 0 rgba(0,0,0,0.07)';
+                      noteArea.focus();
+                      document.execCommand('insertHTML', false, img.outerHTML);
+                    };
+                    img.src = evt.target.result;
+                  };
+                  reader.readAsDataURL(file);
+                  return;
+                }
+              }
+            }
+            // For text/HTML, let default paste behavior handle it
+          });
+
+          // Make links in note area open in new tab ONLY for web URLs
+          noteArea.addEventListener('click', function(e) {
+            if (e.target.tagName === 'A') {
+              const href = e.target.getAttribute('href');
+              if (href && (href.startsWith('http://') || href.startsWith('https://'))) {
+                e.preventDefault();
+                window.open(href, '_blank');
+              } else {
+                e.preventDefault();
+                alert('Only web links (http/https) can be opened.');
+              }
+            }
+          });
+
+          // Update A+ button to cycle 14, 16, 18px and only affect text inside note area
+          const NOTE_FONT_SIZES = ['14px', '16px', '18px'];
+          let noteFontSizeIdx = 0;
+          if (!noteToolbar.querySelector('.note-font-size-btn')) {
+            const fontBtn = addToolbarBtn('A<sup>+</sup>', 'Increase Note Font Size', function() {
+              noteFontSizeIdx = (noteFontSizeIdx + 1) % NOTE_FONT_SIZES.length;
+              // Set font size on all direct children of noteArea
+              Array.from(noteArea.childNodes).forEach(node => {
+                if (node.nodeType === 1) {
+                  node.style.fontSize = NOTE_FONT_SIZES[noteFontSizeIdx];
+                } else if (node.nodeType === 3 && node.textContent.trim() !== '') {
+                  // Wrap text nodes in span to apply font size
+                  const span = document.createElement('span');
+                  span.style.fontSize = NOTE_FONT_SIZES[noteFontSizeIdx];
+                  span.textContent = node.textContent;
+                  noteArea.replaceChild(span, node);
+                }
+              });
+              // Change icon to A- if at max size, else A+
+              const thisBtn = noteToolbar.querySelector('.note-font-size-btn');
+              if (thisBtn) thisBtn.innerHTML = noteFontSizeIdx === NOTE_FONT_SIZES.length - 1 ? 'A<sub>-</sub>' : 'A<sup>+</sup>';
+            });
+            fontBtn.classList.add('note-font-size-btn');
+            noteToolbar.appendChild(fontBtn);
+          }
+
+          noteArea.oninput = () => {
+            window.sections[idx].subtitles[sidx].note = noteArea.innerHTML;
+            saveSections();
+            if (!expanded && /\S/.test(noteArea.textContent)) {
+              expanded = true;
+              noteArea.style.display = 'block';
+              noteToolbar.style.display = 'flex';
+              expIcon.innerHTML = '▼';
+              expIcon.title = 'Collapse note';
+            }
+            if (expanded && !/\S/.test(noteArea.textContent)) {
+              expanded = false;
+              noteArea.style.display = 'none';
+              noteToolbar.style.display = 'none';
+              expIcon.innerHTML = '▶️';
+              expIcon.title = 'Expand note';
+            }
+          };
+          expIcon.onclick = () => {
+            expanded = !expanded;
+            noteArea.style.display = expanded ? 'block' : 'none';
+            noteToolbar.style.display = expanded ? 'flex' : 'none';
+            expIcon.innerHTML = expanded ? '▼' : '▶️';
+            expIcon.title = expanded ? 'Collapse note' : 'Expand note';
+          };
+          card.appendChild(noteToolbar);
+          card.appendChild(noteArea);
+          if (sidx < section.subtitles.length - 1) {
+            const hr = document.createElement('hr');
+            hr.style.margin = '0.25em 0';
+            hr.style.border = '0';
+            hr.style.height = '1px';
+            hr.style.background = 'rgba(255,255,255,0.15)';
+            card.appendChild(hr);
+          }
+        });
+        container.appendChild(card);
+      });
+    }
+
+    // --- Checklist Export/Reset ---
+
+    function resetChecklist() {
+      localStorage.setItem('dynamicChecklistSections', JSON.stringify(defaultSections));
+      window.sections = JSON.parse(JSON.stringify(defaultSections));
+      saveSections();
+      renderSections();
+    }
+
+    // --- Save Notes (full) ---
+    function saveNotesJson() {
+      const currentTitle = document.getElementById('main-title-text').textContent;
+      const currentBg1 = document.getElementById('bgColor1').value;
+      const currentBg2 = document.getElementById('bgColor2').value;
+      const jsonContent = {
+        title: currentTitle,
+        backgroundColors: {
+          bgColor1: currentBg1,
+          bgColor2: currentBg2
+        },
+        sections: window.sections
+      };
+      const blob = new Blob([JSON.stringify(jsonContent, null, 2)], {type: 'application/json'});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `${currentTitle.replace(/[^a-z0-9]/gi, '_').toLowerCase()}_notes.json`;
+      document.body.appendChild(a);
+      a.click();
+      setTimeout(() => {
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+      }, 100);
+    }
+
+    // --- Save Titles/Structure Only ---
+    function saveTitlesJson() {
+      const currentTitle = document.getElementById('main-title-text').textContent;
+      const structure = window.sections.map(section => ({
+        title: section.title,
+        subtitles: (section.subtitles || []).map(sub => typeof sub === 'string' ? sub : (sub.text || ''))
+      }));
+      const jsonContent = {
+        title: currentTitle,
+        structure: structure
+      };
+      const blob = new Blob([JSON.stringify(jsonContent, null, 2)], {type: 'application/json'});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `${currentTitle.replace(/[^a-z0-9]/gi, '_').toLowerCase()}_structure.json`;
+      document.body.appendChild(a);
+      a.click();
+      setTimeout(() => {
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+      }, 100);
+    }
+
+    // --- Import JSON File ---
+    function importChecklist(event) {
+      const file = event.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(evt) {
+          try {
+            const importedData = JSON.parse(evt.target.result);
+            if (importedData && importedData.title && importedData.sections) {
+              // Full notes import
+              window.sections = importedData.sections;
+              document.getElementById('main-title-text').textContent = importedData.title;
+              localStorage.setItem('mainTitle', importedData.title);
+              saveSections();
+              renderSections();
+              alert('Checklist imported successfully!');
+            } else if (importedData && importedData.title && importedData.structure) {
+              // Structure only import
+              window.sections = importedData.structure.map(section => ({
+                title: section.title,
+                subtitles: (section.subtitles || []).map(text => ({ text, note: '' }))
+              }));
+              document.getElementById('main-title-text').textContent = importedData.title;
+              localStorage.setItem('mainTitle', importedData.title);
+              saveSections();
+              renderSections();
+              alert('Structure imported successfully! All notes are empty.');
+            } else {
+              alert('Invalid JSON file or missing required fields (title, sections/structure).');
+            }
+          } catch (e) {
+            alert('Error importing checklist: ' + e.message);
+          }
+        };
+        reader.readAsText(file);
+      }
+    }
+
+    // --- Background Gradient Color Picker Logic (Live Update) ---
+    function setBgGradient(c1, c2) {
+      document.body.style.background = `radial-gradient(circle at 30% 20%, ${c1} 0%, ${c2} 100%)`;
+    }
+    function saveBgColors() {
+      const c1 = document.getElementById('bgColor1').value;
+      const c2 = document.getElementById('bgColor2').value;
+      localStorage.setItem('bgColor1', c1);
+      localStorage.setItem('bgColor2', c2);
+    }
+    document.addEventListener('DOMContentLoaded', function() {
+      // Restore background colors
+      const c1 = localStorage.getItem('bgColor1') || '#a844a1';
+      const c2 = localStorage.getItem('bgColor2') || '#3a1c71';
+      document.getElementById('bgColor1').value = c1;
+      document.getElementById('bgColor2').value = c2;
+      setBgGradient(c1, c2);
+      // Live update on color change
+      document.getElementById('bgColor1').addEventListener('input', function() {
+        setBgGradient(this.value, document.getElementById('bgColor2').value);
+        saveBgColors();
+      });
+      document.getElementById('bgColor2').addEventListener('input', function() {
+        setBgGradient(document.getElementById('bgColor1').value, this.value);
+        saveBgColors();
+      });
+      document.getElementById('saveBgBtn').onclick = saveBgColors;
+      document.getElementById('swapColorsBtn').onclick = function() {
+        const bg1 = document.getElementById('bgColor1');
+        const bg2 = document.getElementById('bgColor2');
+        const tmp = bg1.value;
+        bg1.value = bg2.value;
+        bg2.value = tmp;
+        setBgGradient(bg1.value, bg2.value);
+        saveBgColors();
+      };
+      var aboutBtn = document.getElementById('aboutBtn');
+      if (aboutBtn) {
+        aboutBtn.onclick = function() {
+          document.getElementById('aboutModal').style.display = 'block';
+        };
+      }
+    });
+
+    // --- Title Edit Icon Functionality ---
+    window.onload = function() {
+      window.sections = getSections();
+      renderSections();
+      // Restore title from localStorage if present
+      const mainTitleText = document.getElementById('main-title-text');
+      const savedTitle = localStorage.getItem('mainTitle');
+      if (savedTitle) mainTitleText.textContent = savedTitle;
+      const editTitleBtn = document.getElementById('edit-title-btn');
+      editTitleBtn.addEventListener('click', function() {
+        if (document.getElementById('main-title-input')) return;
+        const current = mainTitleText.textContent;
+        const input = document.createElement('input');
+        input.type = 'text';
+        input.value = current;
+        input.id = 'main-title-input';
+        input.style.cssText = 'font-size:1em; padding:2px 8px; border-radius:4px; border:none; background:rgba(255,255,255,0.13); color:#181820; width: min(350px, 80vw);';
+        mainTitleText.style.display = 'none';
+        editTitleBtn.style.display = 'none';
+        mainTitleText.parentNode.insertBefore(input, editTitleBtn);
+        input.focus();
+        input.select();
+        function finishEdit() {
+          mainTitleText.textContent = input.value || 'Untitled';
+          mainTitleText.style.display = '';
+          editTitleBtn.style.display = '';
+          input.remove();
+          localStorage.setItem('mainTitle', mainTitleText.textContent);
+        }
+        input.addEventListener('blur', finishEdit);
+        input.addEventListener('keydown', function(e) {
+          if (e.key === 'Enter') finishEdit();
+          if (e.key === 'Escape') {
+            mainTitleText.style.display = '';
+            editTitleBtn.style.display = '';
+            input.remove();
+          }
+        });
+      });
+    };
+
+    // --- Text Size Buttons: 3 Grades, Cycle Through Sizes ---
+    // Define the possible font sizes (starting with smallest as default)
+    const NOTE_FONT_SIZES = ['0.87em', '1.1em', '1.35em'];
+    // Helper to get next/prev size
+    function getNextFontSize(current, dir) {
+      let idx = NOTE_FONT_SIZES.indexOf(current);
+      if (idx === -1) idx = 0;
+      if (dir === 'up') return NOTE_FONT_SIZES[Math.min(idx + 1, NOTE_FONT_SIZES.length - 1)];
+      if (dir === 'down') return NOTE_FONT_SIZES[Math.max(idx - 1, 0)];
+      return NOTE_FONT_SIZES[0];
+    }
+
+    // --- Attach global functions for HTML attributes ---
+    window.resetChecklist = resetChecklist;
+    window.saveNotesJson = saveNotesJson;
+    window.saveTitlesJson = saveTitlesJson;
+    window.importChecklist = importChecklist;
+  </script>
+  
+  <div style="position:fixed; bottom:10px; right:10px; opacity:0.7; font-size:12px;">
+  © 2025 CreatorNote v1.0 by EINARI (@aissamnfo)
+</div>
+</body>
+</html>
