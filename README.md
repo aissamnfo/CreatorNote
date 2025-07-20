@@ -1,7 +1,10 @@
 
 
 
-CreatorNote v1.0 - Feature Patch Notes
+
+#CreatorNote v1.0 - Feature Patch Notes
+
+![Screenshot](https://github.com/aissamnfo/CreatorNote/blob/main/Screenshot%202025-07-20%20204435.png)
 
 🚀 What is CreatorNote?
 CreatorNote is a modern, feature-rich notepad and workflow checklist designed specifically for content creators,
